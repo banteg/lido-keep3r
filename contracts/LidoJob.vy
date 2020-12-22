@@ -1,8 +1,12 @@
 # @version 0.2.8
+# @title Deposit buffered ether to Lido
+# @license MIT
+# @author banteg
 
 interface Keep3r:
     def isKeeper(keeper: address) -> bool: view
     def worked(keeper: address): nonpayable
+
 
 interface Lido:
     def isStopped() -> bool: view
