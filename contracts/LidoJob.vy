@@ -25,7 +25,7 @@ def __init__():
 @view
 @external
 def workable() -> bool:
-    return self.lido.getBufferedEther() >= MIN_DEPOSITS * DEPOSIT_SIZE
+    return self.lido.getBufferedEther() / DEPOSIT_SIZE >= MIN_DEPOSITS
 
 
 @external
