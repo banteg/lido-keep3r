@@ -31,7 +31,7 @@ def __init__():
 def available_deposits() -> uint256:
     if self.lido.isStopped():
         return 0
-    if block.timestamp < self.last_key_shortage + 60*60*24:
+    if block.timestamp < self.last_key_shortage + DAO_TIMEOUT:
         return 0
     return min(self.lido.getBufferedEther() / DEPOSIT_SIZE, MAX_DEPOSITS)
 
