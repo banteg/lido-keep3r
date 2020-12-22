@@ -5,6 +5,7 @@ interface Keep3r:
     def worked(keeper: address): nonpayable
 
 interface Lido:
+    def isStopped() -> bool: view
     def getBufferedEther() -> uint256: view
     def depositBufferedEther(max_deposits: uint256): nonpayable
 
@@ -23,15 +24,23 @@ def __init__():
 
 
 @view
+@internal
+def available_deposits() -> uint256:
+    if self.lido.isStopped():
+        return 0
+    return min(self.lido.getBufferedEther() / DEPOSIT_SIZE, MAX_DEPOSITS)
+
+
+@view
 @external
 def workable() -> bool:
-    return self.lido.getBufferedEther() / DEPOSIT_SIZE >= MIN_DEPOSITS
+    return self.available_deposits() >= MIN_DEPOSITS
 
 
 @external
 def work():
     assert self.keeper.isKeeper(msg.sender)  # dev: not keeper
-    deposits: uint256 = min(self.lido.getBufferedEther() / DEPOSIT_SIZE, MAX_DEPOSITS)
+    deposits: uint256 = self.available_deposits()
     assert deposits >= MIN_DEPOSITS  # dev: not workable
     self.lido.depositBufferedEther(deposits)
     self.keeper.worked(msg.sender)
