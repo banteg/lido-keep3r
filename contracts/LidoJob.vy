@@ -12,7 +12,8 @@ interface Lido:
 keeper: public(Keep3r)
 lido: public(Lido)
 DEPOSIT_SIZE: constant(uint256) = 32 * 10 ** 18
-DEPOSITS_PER_CALL: constant(uint256) = 16
+MIN_DEPOSITS: constant(uint256) = 16
+MAX_DEPOSITS: constant(uint256) = 60
 
 
 @external
@@ -22,20 +23,15 @@ def __init__():
 
 
 @view
-@internal
-def _workable() -> bool:
-    return self.lido.getBufferedEther() >= DEPOSITS_PER_CALL * DEPOSIT_SIZE
-
-
-@view
 @external
 def workable() -> bool:
-    return self._workable()
+    return self.lido.getBufferedEther() >= MIN_DEPOSITS * DEPOSIT_SIZE
 
 
 @external
 def work():
     assert self.keeper.isKeeper(msg.sender)  # dev: not keeper
-    assert self._workable()  # dev: not workable
-    self.lido.depositBufferedEther(DEPOSITS_PER_CALL)
+    deposits: uint256 = min(self.lido.getBufferedEther() / DEPOSIT_SIZE, MAX_DEPOSITS)
+    assert deposits >= MIN_DEPOSITS  # dev: not workable
+    self.lido.depositBufferedEther(deposits)
     self.keeper.worked(msg.sender)
