@@ -4,7 +4,7 @@
 # @author banteg
 
 interface Keep3r:
-    def isKeeper(keeper: address) -> bool: view
+    def isKeeper(keeper: address) -> bool: nonpayable
     def worked(keeper: address): nonpayable
 
 
@@ -19,7 +19,7 @@ lido: public(Lido)
 paused_until: public(uint256)
 DEPOSIT_SIZE: constant(uint256) = 32 * 10 ** 18
 MIN_DEPOSITS: constant(uint256) = 16
-MAX_DEPOSITS: constant(uint256) = 60
+MAX_DEPOSITS: constant(uint256) = 64
 
 
 @external
