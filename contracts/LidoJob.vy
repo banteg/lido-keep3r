@@ -18,8 +18,8 @@ keeper: public(Keep3r)
 lido: public(Lido)
 paused_until: public(uint256)
 DEPOSIT_SIZE: constant(uint256) = 32 * 10 ** 18
-MIN_DEPOSITS: constant(uint256) = 16
-MAX_DEPOSITS: constant(uint256) = 64
+MIN_DEPOSITS: constant(uint256) = 8
+MAX_DEPOSITS: constant(uint256) = 32
 
 
 @external

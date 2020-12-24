@@ -2,7 +2,7 @@ from brownie import Wei
 
 
 def test_job(kpr, lido, job, kpr_whale, user, keeper):
-    target = Wei("2500 ether")
+    target = Wei("1100 ether")
     buffered = lido.getBufferedEther()
     if buffered < target:
         lido.submit(lido, {"from": user, "amount": target - buffered})
